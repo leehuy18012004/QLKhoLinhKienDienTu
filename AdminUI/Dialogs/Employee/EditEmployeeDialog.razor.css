@@ -1,0 +1,54 @@
+﻿.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+    .form-container .mud-text-field {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+        .form-container .mud-text-field .mud-input-adornment {
+            color: #5a5a5a;
+        }
+
+    .form-container hr {
+        width: 100%;
+        border: 1px solid #e0e0e0;
+        margin: 16px 0;
+    }
+
+.dialog-actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+}
+
+    .dialog-actions .mud-button {
+        margin: 0 8px;
+    }
+
+/* Nút Close */
+.mud-button {
+    width: 100%;
+    text-transform: uppercase;
+    padding: 12px;
+    font-weight: bold;
+}
+
+    .mud-button.mud-button-filled.mud-button-error {
+        background-color: #d32f2f;
+        color: white;
+        border-radius: 8px;
+    }
+
+        .mud-button.mud-button-filled.mud-button-error:hover {
+            background-color: #b71c1c;
+        }

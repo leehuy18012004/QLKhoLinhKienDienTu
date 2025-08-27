@@ -1,0 +1,75 @@
+﻿@inject HttpClient Http
+<MudDialog class="mud-dialog">
+    <DialogContent>
+        <MudForm>
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên"
+                          @bind-Value="name" Required="true" RequiredError="Chưa nhập tên"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Business" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Địa chỉ"
+                          @bind-Value="address" Required="true" RequiredError="Chưa nhập địa chỉ"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.LocationOn" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Email"
+                          @bind-Value="email" Required="true" RequiredError="Chưa nhập email"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Số điện thoại"
+                          @bind-Value="phoneNumber" Required="true" RequiredError="Chưa nhập số điện thoại"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Phone" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Liên hệ"
+                          @bind-Value="contactPerson" Required="true" RequiredError="Chưa nhập người liên hệ"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person" />
+            <MudCheckBox Variant="Variant.Outlined" Margin="Margin.Dense" T="bool" @bind-Checked="discontinued" Label="Ngừng cung cấp" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="SubmitForm">Lưu thay đổi</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Hủy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public SuplierModel ExistingSuplier { get; set; }
+
+    private MudForm form;
+    private string name;
+    private string address;
+    private string email;
+    private string phoneNumber;
+    private string contactPerson;
+    private bool discontinued;
+
+    int spacing = 0;
+
+    protected override void OnInitialized()
+    {
+        if (ExistingSuplier != null)
+        {
+            name = ExistingSuplier.Name;
+            address = ExistingSuplier.Address;
+            email = ExistingSuplier.Email;
+            phoneNumber = ExistingSuplier.PhoneNumber;
+            contactPerson = ExistingSuplier.ContactPerson;
+            discontinued = ExistingSuplier.Discontinued;
+        }
+    }
+
+    private async Task SubmitForm()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            var updatedSuplier = new SuplierModel(ExistingSuplier.Id, name, address, email, phoneNumber, discontinued, contactPerson);
+            MudDialog.Close(DialogResult.Ok(updatedSuplier));
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private void OnInvalidSubmit()
+    {
+        // Handle invalid form submission
+    }
+}

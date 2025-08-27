@@ -1,0 +1,57 @@
+﻿@inject HttpClient Http
+<MudDialog class="mud-dialog">
+    <DialogContent>
+        <MudForm @ref="form">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="ID"
+                          @bind-Value="id" Required="true" RequiredError="Chưa nhập ID"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Info" Disabled="true" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên"
+                          @bind-Value="name" Required="true" RequiredError="Chưa nhập tên"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Business" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="SubmitForm">Lưu thay đổi</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Hủy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public CategoryModel ExistingCategory { get; set; } // Category object passed from parent component.
+
+    private MudForm form;
+    private string id;
+    private string name;
+
+    int spacing = 0;
+
+    // On initialization, check if there is an ExistingCategory passed to pre-fill the form fields.
+    protected override void OnInitialized()
+    {
+        if (ExistingCategory != null)
+        {
+            id = ExistingCategory.Id.ToString();
+            name = ExistingCategory.Name;
+        }
+    }
+
+    // This method will be triggered when the form is submitted.
+    private async Task SubmitForm()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            // Create the updated CategoryModel with the existing ID, and the modified name.
+            var updatedCategory = new CategoryModel(0, name);
+            // Close the dialog and pass back the updated category data to the parent component.
+            MudDialog.Close(DialogResult.Ok(updatedCategory));
+        }
+    }
+
+    // This method is called if the user cancels the operation.
+    private void Cancel() => MudDialog.Cancel();
+}

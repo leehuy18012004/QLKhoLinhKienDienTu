@@ -1,0 +1,74 @@
+﻿@inject ProductService service
+@inject HttpClient http
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Spacing="spacing" class="form-container">
+            <MudFileUpload T="IBrowserFile" @bind-Files="imgFile">
+                <ActivatorContent>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
+                        Chọn ảnh mới
+                    </MudButton>
+                </ActivatorContent>
+            </MudFileUpload>
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Mã sản phẩm" @bind-Value="id" Disabled="true"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Info" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên sản phẩm" @bind-Value="name" Required="true" RequiredError="Chưa nhập tên sản phẩm"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Mô tả sản phẩm" @bind-Value="description"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description" />
+            <MudTextField InputType="InputType.Number" Variant="Variant.Outlined" Margin="Margin.Dense" T="double" Label="Đơn giá" @bind-Value="price" HelperText="Enter a valid price" Required="true" RequiredError="Chưa nhập đơn giá"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" />
+            <MudTextField InputType="InputType.Number" Variant="Variant.Outlined" Margin="Margin.Dense" T="double" Label="Giá nhập" @bind-Value="importPrice" HelperText="Enter a valid price" Required="true" RequiredError="Chưa có giá nhập"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.MoneyOff" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="SubmitForm">Lưu thay đổi</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Hủy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ProductModel ExistingProduct { get; set; }
+
+    private MudForm form;
+
+    private IList<IBrowserFile> _files = new List<IBrowserFile>();
+    private IBrowserFile imgFile;
+
+    private string id;
+    private string name;
+    private string description;
+    private double price;
+    private double importPrice;
+
+    int spacing = 0;
+
+    protected override void OnInitialized()
+    {
+        if (ExistingProduct != null)
+        {
+            id = ExistingProduct.Id;
+            name = ExistingProduct.Name;
+            description = ExistingProduct.Description;
+            price = ExistingProduct.Price;
+            importPrice = ExistingProduct.ImportPrice;
+        }
+    }
+
+    private async Task SubmitForm()
+    {
+        await form.Validate();
+        if (form.IsValid) ;
+    }
+    private void Cancel() => MudDialog.Cancel();
+    private void OnInvalidSubmit()
+    {
+        // Handle invalid form submission
+    }
+}
+

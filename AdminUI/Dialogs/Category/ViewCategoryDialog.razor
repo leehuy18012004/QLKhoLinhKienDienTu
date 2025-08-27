@@ -1,0 +1,29 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudForm Spacing="spacing" style="width:500px">
+            <!-- ID trường đọc, không thể chỉnh sửa -->
+            <MudTextField ReadOnly="true" Variant="Variant.Outlined" Margin="Margin.Dense" T="int" Label="ID"
+                          @bind-Value="category.Id" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Info" />
+
+            <!-- Tên danh mục trường đọc, không thể chỉnh sửa -->
+            <MudTextField ReadOnly="true" Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên danh mục"
+                          @bind-Value="category.Name" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Label" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Close">Đóng</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public CategoryModel category { get; set; } // Đối tượng CategoryModel được truyền vào
+
+    private void Close() => MudDialog.Close(DialogResult.Ok(true));
+    int spacing = 0;
+}

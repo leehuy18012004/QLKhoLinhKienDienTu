@@ -1,0 +1,43 @@
+﻿@inject HttpClient Http
+<MudDialog class="mud-dialog">
+    <DialogContent>
+        <MudForm @ref="form">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="ID"
+                          @bind-Value="id" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Info" Disabled="true" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên thương hiệu"
+                          @bind-Value="name" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Business" Disabled="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Đóng</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public BrandModel ExistingBrand { get; set; } // Brand object passed from parent component.
+
+    private MudForm form;
+    private string id;
+    private string name;
+
+    int spacing = 0;
+
+    // On initialization, populate the fields from ExistingBrand.
+    protected override void OnInitialized()
+    {
+        if (ExistingBrand != null)
+        {
+            id = ExistingBrand.Id.ToString();
+            name = ExistingBrand.Name;
+        }
+    }
+
+    // Close the dialog when the user cancels.
+    private void Cancel() => MudDialog.Cancel();
+}

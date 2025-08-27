@@ -1,0 +1,40 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Spacing="spacing" style="width:500px">
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="ID"
+                          @bind-Value="id" Disabled="true" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Info" />
+            <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Label="Tên thương hiệu"
+                          @bind-Value="name" Required="true" RequiredError="Chưa nhập tên thương hiệu"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="SubmitForm">Xác nhận</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Hủy</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    private MudForm form;
+    private string id;
+    private string name;
+
+    private async Task SubmitForm()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            // Form is valid, close the dialog and pass the data
+            var brandData = new BrandModel(0, name);
+            MudDialog.Close(DialogResult.Ok(brandData));
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    int spacing = 0;
+}
